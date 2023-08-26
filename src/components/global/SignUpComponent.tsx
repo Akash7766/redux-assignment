@@ -1,7 +1,33 @@
-import { Button, Card, Checkbox, Form, Input, Space, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  Input,
+  Space,
+  Typography,
+  message,
+} from "antd";
 import { AiOutlineLock, AiOutlineMail } from "react-icons/ai";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "../../utils/firebase.init";
+import { useForm } from "antd/es/form/Form";
+import { useNavigate } from "react-router-dom";
 
 const SignUpComponent = () => {
+  const navigate = useNavigate();
+  const [form] = useForm();
+  const [createUserWithEmailAndPassword, user, loading, error] =
+    useCreateUserWithEmailAndPassword(auth);
+  if (user) {
+    form.resetFields();
+    message.success("User create successful");
+    navigate("/");
+  }
+  if (error) {
+    console.log(error);
+    message.error("Something went wrong. try again");
+  }
   return (
     <div
       // className="auth-page"
@@ -40,6 +66,10 @@ const SignUpComponent = () => {
           name="normal_Register"
           className="Register-form"
           initialValues={{ remember: true }}
+          form={form}
+          onFinish={(values) =>
+            createUserWithEmailAndPassword(values?.email, values?.password)
+          }
         >
           <Form.Item
             name="email"
@@ -76,7 +106,7 @@ const SignUpComponent = () => {
           </Form.Item>
           <Form.Item>
             <Button
-              loading={false}
+              loading={loading}
               size="large"
               style={{ display: "block", width: "100%" }}
               type="primary"
