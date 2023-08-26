@@ -1,9 +1,28 @@
 "use client";
-import { Button, Checkbox, Col, Form, Input, Row } from "antd";
+import { Button, Checkbox, Col, Form, Input, Row, message } from "antd";
 import { MdEmail, MdLock } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../utils/firebase.init";
+import { useForm } from "antd/es/form/Form";
+import { useEffect } from "react";
 
 const LoginComponent = () => {
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
+  const navigate = useNavigate();
+  const [form] = useForm();
+
+  useEffect(() => {
+    if (user) {
+      form.resetFields();
+      message.success("Login successful");
+      navigate("/");
+    }
+    if (error) {
+      message.error("Something went wrong. try again");
+    }
+  });
   return (
     <Row className="h-full" align="middle" justify="center">
       <Col sm={24} md={10} lg={12}>
@@ -31,7 +50,13 @@ const LoginComponent = () => {
                 Welcome Back Please Login
               </h2>
             </div>
-            <Form size="large">
+            <Form
+              size="large"
+              form={form}
+              onFinish={(values) =>
+                signInWithEmailAndPassword(values?.email, values?.password)
+              }
+            >
               <Form.Item
                 name="email"
                 rules={[
@@ -62,7 +87,7 @@ const LoginComponent = () => {
               <Form.Item>
                 <Button
                   block
-                  // loading={loading}
+                  loading={loading}
                   type="primary"
                   htmlType="submit"
                 >

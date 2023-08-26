@@ -13,21 +13,26 @@ import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../../utils/firebase.init";
 import { useForm } from "antd/es/form/Form";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const SignUpComponent = () => {
   const navigate = useNavigate();
   const [form] = useForm();
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-  if (user) {
-    form.resetFields();
-    message.success("User create successful");
-    navigate("/");
-  }
-  if (error) {
-    console.log(error);
-    message.error("Something went wrong. try again");
-  }
+
+  useEffect(() => {
+    if (user) {
+      form.resetFields();
+      message.success("User create successful");
+      navigate("/");
+    }
+    if (error) {
+      console.log(error);
+      message.error("Something went wrong. try again");
+    }
+  });
+
   return (
     <div
       // className="auth-page"

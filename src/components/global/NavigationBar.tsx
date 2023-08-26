@@ -1,8 +1,14 @@
 import { AiOutlineMenu } from "react-icons/ai";
 import "../../style/nav.css";
 import { Link } from "react-router-dom";
+import { useSignOut } from "react-firebase-hooks/auth";
+import { auth } from "../../utils/firebase.init";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Button, message } from "antd";
 
 const NavigationBar = () => {
+  const [user] = useAuthState(auth);
+  const [signOut, signOutLoading] = useSignOut(auth);
   return (
     <header>
       <nav className="bg-white w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
@@ -19,15 +25,32 @@ const NavigationBar = () => {
             <li>
               <Link to="/all-books">All books</Link>
             </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/sign-up">Sign Up</Link>
-            </li>
-            <li>
-              <Link to="">Log out</Link>
-            </li>
+            {user ? (
+              <li>
+                <Button loading={signOutLoading}>
+                  <Link
+                    onClick={async () => {
+                      const success = await signOut();
+                      if (success) {
+                        message.success("You are sign out");
+                      }
+                    }}
+                    to=""
+                  >
+                    Log out
+                  </Link>
+                </Button>
+              </li>
+            ) : (
+              <>
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+                <li>
+                  <Link to="/sign-up">Sign Up</Link>
+                </li>
+              </>
+            )}
 
             <label htmlFor="check" className="close-menu">
               X
