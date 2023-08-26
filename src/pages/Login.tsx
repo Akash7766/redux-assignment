@@ -1,7 +1,9 @@
+import LoginComponent from "../components/global/LoginComponent";
+
 const Login = () => {
   return (
-    <div>
-      <h1>Login page</h1>
+    <div className="h-screen">
+      <LoginComponent />
     </div>
   );
 };

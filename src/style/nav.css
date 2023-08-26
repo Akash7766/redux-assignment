@@ -55,3 +55,7 @@
     right: 0;
   }
 }
+
+.ant-btn-primary {
+  background-color: rgb(50, 92, 146) !important;
+}

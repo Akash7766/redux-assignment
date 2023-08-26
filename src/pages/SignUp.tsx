@@ -1,7 +1,9 @@
+import SignUpComponent from "../components/global/SignUpComponent";
+
 const SignUp = () => {
   return (
-    <div>
-      <h1>SignUp page</h1>
+    <div className="h-screen">
+      <SignUpComponent />
     </div>
   );
 };
