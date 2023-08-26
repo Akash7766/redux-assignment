@@ -1,30 +1,24 @@
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../redux/hooks";
-import { selectCounterValue } from "../redux/counter/counterSelector";
-import { decrement, increment } from "../redux/counter/counterSlice";
+import { bookData } from "../data/Books";
+import { Card, Col, Row } from "antd";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const counter = useAppSelector(selectCounterValue);
-
-  console.log(counter);
   return (
-    <div>
-      <h1>This is home {counter}</h1>
-      <div className="flex gap-3">
-        <button
-          onClick={() => dispatch(increment())}
-          className="py-3 px-6 border"
-        >
-          +
-        </button>
-        <button
-          onClick={() => dispatch(decrement())}
-          className="py-3 px-6 border"
-        >
-          -
-        </button>
-      </div>
+    <div className="pt-10">
+      <Row gutter={[20, 20]}>
+        {bookData?.map((item) => {
+          return (
+            <Col key={item?.title} xs={24} md={12} lg={8}>
+              <Card title={item?.title}>
+                <div className="flex justify-between mb-4">
+                  <h3>Author : {item?.author}</h3>
+                  <h3>Genre : {item?.genre}</h3>
+                </div>
+                <p>Published date : {item?.publicationDate}</p>
+              </Card>
+            </Col>
+          );
+        })}
+      </Row>
     </div>
   );
 };
