@@ -2,15 +2,18 @@ import { Button, PaginationProps, Popconfirm, Space, Table } from "antd";
 import { IBooks } from "../data/Books";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import type { ColumnsType } from "antd/es/table";
+import { useDeleteBookMutation } from "../redux/books/bookSlice";
 interface IProps {
   data?: IBooks[];
   loading?: boolean;
   pagination?: PaginationProps;
 }
 const AllBookList: React.FC<IProps> = ({ data, pagination }) => {
+  const [deleteBook, { isLoading: deleteLoading }] = useDeleteBookMutation();
+
   const dataSource = data?.map((x) => ({
     key: x?.title,
-    id: x?.title,
+    id: x?._id,
     title: x?.title,
     author: x?.author,
     genre: x?.genre,
@@ -44,7 +47,7 @@ const AllBookList: React.FC<IProps> = ({ data, pagination }) => {
       dataIndex: "id",
       key: "id",
       align: "center",
-      render: () => (
+      render: (id) => (
         <Space>
           <Button
             style={{ fontSize: 20, borderRadius: 5 }}
@@ -58,9 +61,7 @@ const AllBookList: React.FC<IProps> = ({ data, pagination }) => {
 
           <Popconfirm
             title="Are you sure to delete it?"
-            // onConfirm={() =>
-            //   getAccess(["FORBIDDEN"], () => deleteSection.mutate(id))
-            // }
+            onConfirm={() => deleteBook(id)}
             okText="Yes"
             cancelText="No"
             okButtonProps={{ danger: true }}
@@ -81,7 +82,7 @@ const AllBookList: React.FC<IProps> = ({ data, pagination }) => {
     <div>
       <Table
         // loading={loading}
-        columns={columns}
+        columns={columns as []}
         dataSource={dataSource}
         pagination={pagination}
       />
