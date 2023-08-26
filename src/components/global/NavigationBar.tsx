@@ -9,13 +9,16 @@ import { Button, message } from "antd";
 const NavigationBar = () => {
   const [user] = useAuthState(auth);
   const [signOut, signOutLoading] = useSignOut(auth);
+
+  console.log(user?.email);
   return (
     <header>
       <nav className="bg-white w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
         <ul className="navigation container mx-auto w-100 flex flex-wrap justify-between items-center relative py-8">
-          <a className="logo" href="#">
+          <Link to="/">
             <h3 className="font-bold text-2xl">LOGO</h3>
-          </a>
+          </Link>
+
           <input type="checkbox" id="check" />
 
           <span className="menu flex [&>li]:pl-8 [&>li>a]:text-center [&>li>a]:relative [&>li>a]:transition [&>li>a]:duration-200 [&>li>a]:ease-in-out [&>li>a]:font-medium [&>li>a]:text-lg">
